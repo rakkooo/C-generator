@@ -6,14 +6,14 @@ export default function PFPGenerator() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   const assetCategories = {
-    backgrounds: { count: 28, emoji: "🎨", name: "Backgrounds" },
+    backgrounds: { count: 29, emoji: "🎨", name: "Backgrounds" },
     backs: { count: 31, emoji: "🔄", name: "Backs" },
     beards: { count: 31, emoji: "🧔", name: "Beards" },
     clothes: { count: 31, emoji: "👕", name: "Clothes" },
     eyebrows: { count: 31, emoji: "🤨", name: "Eyebrows" },
     eyes: { count: 31, emoji: "👀", name: "Eyes" },
     faces: { count: 1, emoji: "😊", name: "Faces" },
-    hats: { count: 34, emoji: "🎩", name: "Hats" },
+    hats: { count: 35, emoji: "🎩", name: "Hats" },
     mouths: { count: 32, emoji: "👄", name: "Mouths" },
   }
 
