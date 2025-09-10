@@ -6,7 +6,7 @@ export default function PFPGenerator() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   const assetCategories = {
-    backgrounds: { count: 29, emoji: "🎨", name: "Backgrounds" },
+    backgrounds: { count: 28, emoji: "🎨", name: "Backgrounds" },
     backs: { count: 31, emoji: "🔄", name: "Backs" },
     beards: { count: 31, emoji: "🧔", name: "Beards" },
     clothes: { count: 31, emoji: "👕", name: "Clothes" },
@@ -229,6 +229,21 @@ export default function PFPGenerator() {
   }
 
   return (
+    <>
+      <style jsx>{`
+        @keyframes rainbow {
+          0% { background-position: 0% 50% }
+          50% { background-position: 100% 50% }
+          100% { background-position: 0% 50% }
+        }
+        .animate-rainbow {
+          background-size: 400% 400%;
+          animation: rainbow 3s ease infinite;
+        }
+        .animate-rainbow:hover {
+          animation: rainbow 1s ease infinite;
+        }
+      `}</style>
     <div className="min-h-screen bg-gradient-to-br from-[#ccc4fc] to-[#e0d9ff]">
       {/* Navigation Menu */}
       <nav className="w-full bg-white/20 backdrop-blur-sm border-b border-white/30 px-8 py-4 sticky top-0 z-40">
@@ -369,15 +384,16 @@ export default function PFPGenerator() {
               <h3 className="text-lg font-semibold text-[#4c1d95] mb-3 flex items-center gap-2">
                 <span>💾</span>Download
               </h3>
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-3">
                 <button
-                  className="flex-1 px-4 py-2 bg-[#7c3aed] text-white rounded-lg font-medium hover:bg-[#6d28d9] transition-colors"
+                  className="w-full px-4 py-2 bg-[#7c3aed] text-white rounded-lg font-medium hover:bg-[#6d28d9] transition-colors"
                   onClick={downloadPFP}
                 >
                   Download PNG PFP
                 </button>
-                <button className="px-4 py-2 bg-white/50 text-[#4c1d95] rounded-lg font-medium hover:bg-white/70 transition-colors">
-                  Share
+                <button className="w-full px-8 py-4 bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 via-indigo-500 to-purple-500 text-white rounded-xl font-bold text-xl shadow-2xl hover:shadow-3xl transition-all duration-300 animate-pulse hover:scale-110 hover:-translate-y-1 cursor-pointer border-4 border-white animate-rainbow relative overflow-hidden">
+                  <span className="relative z-10 drop-shadow-lg">🎉 Submit 🎉</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-50 transform -skew-x-12"></div>
                 </button>
               </div>
             </div>
@@ -458,5 +474,6 @@ export default function PFPGenerator() {
         </div>
       </main>
     </div>
+    </>
   )
 }
