@@ -54,6 +54,8 @@ export default function PFPGenerator() {
     previewSrc: null as string | null,
   })
 
+  const [showExternalLinkConfirm, setShowExternalLinkConfirm] = useState(false)
+
   const generateAssetPath = (category: string, index: number) => {
     // Special handling for clothes - it should stay as "clothes" not "clothe"
     if (category === "clothes") {
@@ -228,6 +230,15 @@ export default function PFPGenerator() {
     setSelectedTraits(newTraits)
   }
 
+  const handleSubmitClick = () => {
+    setShowExternalLinkConfirm(true)
+  }
+
+  const handleExternalLinkConfirm = () => {
+    setShowExternalLinkConfirm(false)
+    window.open("https://forms.gle/DeqkR9j9CYRS45to6", "_blank")
+  }
+
   return (
     <>
       <style jsx>{`
@@ -391,7 +402,9 @@ export default function PFPGenerator() {
                 >
                   Download PNG PFP
                 </button>
-                <button className="w-full px-8 py-4 bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 via-indigo-500 to-purple-500 text-white rounded-xl font-bold text-xl shadow-2xl hover:shadow-3xl transition-all duration-300 animate-pulse hover:scale-110 hover:-translate-y-1 cursor-pointer border-4 border-white animate-rainbow relative overflow-hidden">
+                <button 
+                  onClick={handleSubmitClick}
+                  className="w-full px-8 py-4 bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 via-indigo-500 to-purple-500 text-white rounded-xl font-bold text-xl shadow-2xl hover:shadow-3xl transition-all duration-300 animate-pulse hover:scale-110 hover:-translate-y-1 cursor-pointer border-4 border-white animate-rainbow relative overflow-hidden">
                   <span className="relative z-10 drop-shadow-lg">🎉 Submit 🎉</span>
                   <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-50 transform -skew-x-12"></div>
                 </button>
@@ -473,6 +486,40 @@ export default function PFPGenerator() {
           </div>
         </div>
       </main>
+
+      {/* External Link Confirmation Modal */}
+      {showExternalLinkConfirm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowExternalLinkConfirm(false)}>
+          <div className="bg-white rounded-xl p-6 max-w-md mx-4 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="text-center">
+              <div className="mb-4">
+                <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <span className="text-2xl">⚠️</span>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">External Link</h3>
+                <p className="text-gray-600 text-sm">
+                  You will be redirected to a Google Form.<br/>
+                  Do you want to continue?
+                </p>
+              </div>
+              <div className="flex gap-3">
+                <button 
+                  onClick={() => setShowExternalLinkConfirm(false)}
+                  className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={handleExternalLinkConfirm}
+                  className="flex-1 px-4 py-2 bg-[#7c3aed] text-white rounded-lg font-medium hover:bg-[#6d28d9] transition-colors"
+                >
+                  Continue
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
     </>
   )
