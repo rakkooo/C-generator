@@ -254,6 +254,37 @@ export default function PFPGenerator() {
         .animate-rainbow:hover {
           animation: rainbow 1s ease infinite;
         }
+        @keyframes glow {
+          0%, 100% { 
+            box-shadow: 0 0 5px #ffd700, 0 0 10px #ffd700, 0 0 15px #ffd700, 0 0 20px #ffd700;
+            border-color: #ffd700;
+          }
+          50% { 
+            box-shadow: 0 0 10px #ffed4a, 0 0 20px #ffed4a, 0 0 30px #ffed4a, 0 0 40px #ffed4a;
+            border-color: #ffed4a;
+          }
+        }
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .hats-glow {
+          animation: glow 2s ease-in-out infinite;
+        }
+        .hat-32-glow {
+          animation: glow 2s ease-in-out infinite, spin 3s linear infinite;
+          border: 3px solid #ffd700 !important;
+          position: relative;
+        }
+        .hat-32-glow::before {
+          content: '';
+          position: absolute;
+          inset: -3px;
+          border-radius: inherit;
+          background: linear-gradient(45deg, #ffd700, #ffed4a, #ffd700);
+          z-index: -1;
+          animation: spin 2s linear infinite reverse;
+        }
       `}</style>
     <div className="min-h-screen bg-gradient-to-br from-[#ccc4fc] to-[#e0d9ff]">
       {/* Navigation Menu */}
@@ -426,7 +457,7 @@ export default function PFPGenerator() {
                     activeCategory === category
                       ? "bg-[#7c3aed] text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
+                  } ${category === 'hats' ? 'hats-glow' : ''}`}
                 >
                   <span>{config.emoji}</span>
                   <span>{config.name}</span>
@@ -464,7 +495,7 @@ export default function PFPGenerator() {
                         selectedTraits[activeCategory] === `${i}`
                           ? "border-[#7c3aed] bg-[#7c3aed]/10"
                           : "border-gray-200 hover:border-[#ccc4fc]"
-                      }`}
+                      } ${activeCategory === 'hats' && i === 32 ? 'hat-32-glow' : ''}`}
                       onClick={() => selectTrait(activeCategory, `${i}`)}
                       title={`${assetCategories[activeCategory as keyof typeof assetCategories].name} ${i}`}
                     >
