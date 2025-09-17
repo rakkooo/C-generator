@@ -13,7 +13,7 @@ export default function PFPGenerator() {
     eyebrows: { count: 31, emoji: "🤨", name: "Eyebrows" },
     eyes: { count: 31, emoji: "👀", name: "Eyes" },
     faces: { count: 1, emoji: "😊", name: "Faces" },
-    hats: { count: 35, emoji: "🎩", name: "Hats" },
+    hats: { count: 33, emoji: "🎩", name: "Hats" },
     mouths: { count: 32, emoji: "👄", name: "Mouths" },
   }
 
