@@ -96,7 +96,7 @@ export default function PFPGenerator() {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     // Draw traits in order
-    const drawOrder = ["backgrounds", "backs", "faces", "clothes", "beards", "eyebrows", "eyes", "mouths", "hats"]
+    const drawOrder = ["backgrounds", "backs", "clothes", "faces", "eyebrows", "eyes", "mouths", "beards", "hats"]
 
     for (const category of drawOrder) {
       const traitValue = selectedTraits[category]
