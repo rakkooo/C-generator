@@ -316,13 +316,6 @@ export default function PFPGenerator() {
           0%, 100% { opacity: 0.6; transform: scale(1); }
           50% { opacity: 1; transform: scale(1.1); }
         }
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
       `}</style>
     <div className="min-h-screen bg-gradient-to-br from-[#ccc4fc] to-[#e0d9ff]">
       {/* Navigation Menu */}
@@ -479,11 +472,11 @@ export default function PFPGenerator() {
           </div>
 
           {/* Right Traits Panel */}
-          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-4 md:p-6">
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-3 md:p-4">
             <h3 className="text-xl font-semibold text-[#4c1d95] mb-6">Customize Traits</h3>
 
             {/* Category Tabs */}
-            <div className="flex flex-wrap gap-1 md:gap-2 mb-4 md:mb-6 border-b border-gray-200 pb-2 md:pb-4 overflow-x-auto scrollbar-hide">
+            <div className="flex flex-wrap gap-1 md:gap-2 mb-3 md:mb-4 border-b border-gray-200 pb-2 md:pb-3 overflow-x-auto">
               {Object.entries(assetCategories).map(([category, config]) => (
                 <button
                   key={category}
