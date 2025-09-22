@@ -274,6 +274,7 @@ export default function PFPGenerator() {
         }
         .backs-glow {
           animation: glow 2s ease-in-out infinite;
+          margin: 2px;
         }
         .back-30-glow {
           animation: glow 2s ease-in-out infinite, spin 3s linear infinite;
@@ -342,11 +343,7 @@ export default function PFPGenerator() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-2 md:px-4 py-4 md:py-8">
         {/* Current Trait Display */}
-        <div
-          className={`bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-8 transition-opacity ${
-            currentTraitControls.isVisible ? "opacity-100" : "opacity-50"
-          }`}
-        >
+        <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-8">
           <h3 className="text-lg font-semibold text-[#4c1d95] mb-4">Current Selection</h3>
           <div className="flex gap-6">
             <div className="flex-1">
@@ -434,7 +431,7 @@ export default function PFPGenerator() {
             <button
               className="px-4 py-2 text-white rounded-lg font-medium hover:bg-[#6d28d9] transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
               onClick={randomizeAll}
-              style={{backgroundColor: '#7c3aed'}}
+              style={{backgroundColor: '#7c3aed !important', opacity: '1 !important'}}
             >
               🎲 Randomize All
             </button>
