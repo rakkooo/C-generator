@@ -338,7 +338,7 @@ export default function PFPGenerator() {
       <main className="max-w-7xl mx-auto px-2 md:px-4 py-4 md:py-8">
         {/* Current Trait Display */}
         <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-8">
-          <h3 className="text-lg font-semibold text-[#4c1d95] mb-4">Current Selection</h3>
+          <h3 className="text-lg font-semibold text-[#4c1d95] mb-6">Current Selection</h3>
           <div className="flex gap-6">
             <div className="flex-1">
               <div className="mb-4">
@@ -436,7 +436,7 @@ export default function PFPGenerator() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
           {/* Left Canvas Panel */}
           <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-4 md:p-6">
-            <h3 className="text-xl font-semibold text-[#4c1d95] mb-4">Your Character</h3>
+            <h3 className="text-xl font-semibold text-[#4c1d95] mb-6">Your Character</h3>
             <div className="text-center">
               <canvas
                 ref={canvasRef}
@@ -507,7 +507,7 @@ export default function PFPGenerator() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-5 md:grid-cols-6 gap-1 md:gap-3 max-h-80 overflow-y-auto" id={`${activeCategory}Icons`}>
+              <div className="grid grid-cols-5 md:grid-cols-6 gap-1 md:gap-3 max-h-80 overflow-y-hidden" id={`${activeCategory}Icons`}>
                 <div
                   className="w-11 h-11 md:w-14 md:h-14 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-200 transition-colors border-2 border-[#ccc4fc] hover:border-[#7c3aed]"
                   onClick={() => selectTrait(activeCategory, "none")}
