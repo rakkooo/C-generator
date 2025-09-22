@@ -298,15 +298,29 @@ export default function PFPGenerator() {
         .hat-32-rare::before {
           content: '✨';
           position: absolute;
-          top: -2px;
-          right: -2px;
-          font-size: 10px;
+          top: -1px;
+          right: -1px;
+          font-size: 8px;
           z-index: 10;
           animation: sparkle 3s ease-in-out infinite;
+        }
+        @media (min-width: 768px) {
+          .hat-32-rare::before {
+            top: -2px;
+            right: -2px;
+            font-size: 10px;
+          }
         }
         @keyframes sparkle {
           0%, 100% { opacity: 0.6; transform: scale(1); }
           50% { opacity: 1; transform: scale(1.1); }
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
         }
       `}</style>
     <div className="min-h-screen bg-gradient-to-br from-[#ccc4fc] to-[#e0d9ff]">
@@ -326,10 +340,10 @@ export default function PFPGenerator() {
       </nav>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-4 md:py-8">
+      <main className="max-w-7xl mx-auto px-2 md:px-4 py-4 md:py-8">
         {/* Current Trait Display */}
         <div
-          className={`bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6 mb-8 transition-opacity ${
+          className={`bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-8 transition-opacity ${
             currentTraitControls.isVisible ? "opacity-100" : "opacity-50"
           }`}
         >
@@ -428,9 +442,9 @@ export default function PFPGenerator() {
         </div>
 
         {/* Generator Section */}
-        <div className="grid lg:grid-cols-2 gap-8 max-w-none">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
           {/* Left Canvas Panel */}
-          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6">
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-4 md:p-6">
             <h3 className="text-xl font-semibold text-[#4c1d95] mb-4">Your Character</h3>
             <div className="text-center">
               <canvas
@@ -468,11 +482,11 @@ export default function PFPGenerator() {
           </div>
 
           {/* Right Traits Panel */}
-          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6">
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-4 md:p-6">
             <h3 className="text-xl font-semibold text-[#4c1d95] mb-6">Customize Traits</h3>
 
             {/* Category Tabs */}
-            <div className="flex flex-wrap gap-1 md:gap-2 mb-4 md:mb-6 border-b border-gray-200 pb-4 overflow-x-auto">
+            <div className="flex flex-wrap gap-1 md:gap-2 mb-4 md:mb-6 border-b border-gray-200 pb-2 md:pb-4 overflow-x-auto scrollbar-hide">
               {Object.entries(assetCategories).map(([category, config]) => (
                 <button
                   key={category}
@@ -502,9 +516,9 @@ export default function PFPGenerator() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-4 md:grid-cols-6 gap-2 md:gap-3 max-h-80 overflow-y-auto" id={`${activeCategory}Icons`}>
+              <div className="grid grid-cols-5 md:grid-cols-6 gap-1 md:gap-3 max-h-80 overflow-y-auto" id={`${activeCategory}Icons`}>
                 <div
-                  className="w-12 h-12 md:w-14 md:h-14 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-200 transition-colors border-2 border-[#ccc4fc] hover:border-[#7c3aed]"
+                  className="w-11 h-11 md:w-14 md:h-14 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-200 transition-colors border-2 border-[#ccc4fc] hover:border-[#7c3aed]"
                   onClick={() => selectTrait(activeCategory, "none")}
                   title="None"
                 >
@@ -515,7 +529,7 @@ export default function PFPGenerator() {
                   (_, i) => (
                     <div
                       key={i}
-                      className={`w-12 h-12 md:w-14 md:h-14 bg-gray-50 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors border-2 ${
+                      className={`w-11 h-11 md:w-14 md:h-14 bg-gray-50 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors border-2 ${
                         selectedTraits[activeCategory] === `${i}`
                           ? "border-[#7c3aed] bg-[#7c3aed]/10"
                           : "border-gray-200 hover:border-[#ccc4fc]"
@@ -526,7 +540,7 @@ export default function PFPGenerator() {
                       <img
                         src={generateAssetPath(activeCategory, i) || "/placeholder.svg"}
                         alt={`${assetCategories[activeCategory as keyof typeof assetCategories].name} ${i}`}
-                        className="w-10 h-10 md:w-12 md:h-12 object-contain"
+                        className="w-9 h-9 md:w-12 md:h-12 object-contain"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement
                           target.style.display = "none"
