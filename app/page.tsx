@@ -269,7 +269,8 @@ export default function PFPGenerator() {
           to { transform: rotate(360deg); }
         }
         .hats-glow {
-          animation: glow 2s ease-in-out infinite;
+          box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+          border: 1px solid rgba(255, 215, 0, 0.3) !important;
         }
         .back-30-glow {
           animation: glow 2s ease-in-out infinite, spin 3s linear infinite;
@@ -287,7 +288,9 @@ export default function PFPGenerator() {
         }
         .hat-32-rare {
           position: relative;
-          background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+          background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+          box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+          border: 1px solid rgba(255, 215, 0, 0.4) !important;
         }
         .hat-32-rare::before {
           content: '✨';
@@ -412,7 +415,7 @@ export default function PFPGenerator() {
               Remove Trait
             </button>
             <button
-              className="px-4 py-2 bg-gradient-to-r from-[#7c3aed] to-[#9333ea] text-white rounded-lg font-medium hover:from-[#6d28d9] hover:to-[#8b5cf6] transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+              className="px-4 py-2 bg-gradient-to-r from-[#7c3aed] to-[#9333ea] text-white rounded-lg font-medium hover:from-[#6d28d9] hover:to-[#8b5cf6] transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 !bg-gradient-to-r !from-[#7c3aed] !to-[#9333ea]"
               onClick={randomizeAll}
             >
               🎲 Randomize All
@@ -474,7 +477,7 @@ export default function PFPGenerator() {
                     activeCategory === category
                       ? "bg-[#7c3aed] text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  } ${category === 'backs' ? 'hats-glow' : ''}`}
+                  } ${category === 'backs' ? 'hats-glow' : ''} ${category === 'hats' ? 'hats-glow' : ''}`}
                 >
                   <span>{config.emoji}</span>
                   <span>{config.name}</span>
