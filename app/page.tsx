@@ -274,8 +274,24 @@ export default function PFPGenerator() {
         }
         .backs-glow {
           animation: glow 2s ease-in-out infinite;
-          margin: 4px;
-          padding: 2px;
+          position: relative;
+          isolation: isolate;
+        }
+        .trait-grid {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(124, 58, 237, 0.35) transparent;
+          overscroll-behavior: none;
+          scrollbar-gutter: stable;
+        }
+        .trait-grid::-webkit-scrollbar {
+          width: 6px;
+        }
+        .trait-grid::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .trait-grid::-webkit-scrollbar-thumb {
+          background-color: rgba(124, 58, 237, 0.35);
+          border-radius: 9999px;
         }
         .back-30-glow {
           animation: glow 2s ease-in-out infinite, spin 3s linear infinite;
@@ -337,8 +353,8 @@ export default function PFPGenerator() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-2 md:px-4 py-4 md:py-8">
         {/* Current Trait Display */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-4 md:p-6 mb-4 md:mb-8">
-          <h3 className="text-lg font-semibold text-[#4c1d95] mb-6">Current Selection</h3>
+        <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg px-4 py-5 md:px-6 md:py-7 mb-4 md:mb-8">
+          <h3 className="text-lg font-semibold text-[#4c1d95] mb-6 tracking-tight">Current Selection</h3>
           <div className="flex gap-6">
             <div className="flex-1">
               <div className="mb-4">
@@ -407,7 +423,7 @@ export default function PFPGenerator() {
               )}
             </div>
           </div>
-          <div className="flex gap-2 mt-4">
+          <div className="flex gap-2 mt-6">
             <button
               className="px-4 py-2 bg-[#ccc4fc] text-[#4c1d95] rounded-lg font-medium hover:bg-[#b8aef7] transition-colors disabled:opacity-50"
               disabled={!currentTraitControls.isVisible}
@@ -423,9 +439,8 @@ export default function PFPGenerator() {
               Remove Trait
             </button>
             <button
-              className="px-4 py-2 text-white rounded-lg font-medium hover:bg-[#6d28d9] transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+              className="px-4 py-2 text-white rounded-lg font-medium bg-[#7c3aed] hover:bg-[#6d28d9] transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
               onClick={randomizeAll}
-              style={{backgroundColor: '#7c3aed !important', opacity: '1 !important'}}
             >
               🎲 Randomize All
             </button>
@@ -435,8 +450,8 @@ export default function PFPGenerator() {
         {/* Generator Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
           {/* Left Canvas Panel */}
-          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-4 md:p-6">
-            <h3 className="text-xl font-semibold text-[#4c1d95] mb-6">Your Character</h3>
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg px-4 py-5 md:px-6 md:py-7">
+            <h3 className="text-xl font-semibold text-[#4c1d95] mb-6 tracking-tight">Your Character</h3>
             <div className="text-center">
               <canvas
                 ref={canvasRef}
@@ -473,11 +488,11 @@ export default function PFPGenerator() {
           </div>
 
           {/* Right Traits Panel */}
-          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-2 md:p-3">
-            <h3 className="text-xl font-semibold text-[#4c1d95] mb-6">Customize Traits</h3>
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg px-4 py-5 md:px-6 md:py-7">
+            <h3 className="text-xl font-semibold text-[#4c1d95] mb-6 tracking-tight">Customize Traits</h3>
 
             {/* Category Tabs */}
-            <div className="flex flex-wrap gap-1 md:gap-2 mb-3 md:mb-4 border-b border-gray-200 pb-2 md:pb-3">
+            <div className="flex flex-wrap gap-1.5 md:gap-2.5 mb-4 md:mb-6 border-b border-gray-200 pb-3 md:pb-4">
               {Object.entries(assetCategories).map(([category, config]) => (
                 <button
                   key={category}
@@ -507,7 +522,10 @@ export default function PFPGenerator() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-5 md:grid-cols-6 gap-1 md:gap-3 max-h-80 overflow-y-hidden" id={`${activeCategory}Icons`}>
+              <div
+                className="trait-grid grid grid-cols-5 md:grid-cols-6 gap-1.5 md:gap-3 max-h-80 overflow-y-auto pr-1"
+                id={`${activeCategory}Icons`}
+              >
                 <div
                   className="w-11 h-11 md:w-14 md:h-14 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-200 transition-colors border-2 border-[#ccc4fc] hover:border-[#7c3aed]"
                   onClick={() => selectTrait(activeCategory, "none")}
