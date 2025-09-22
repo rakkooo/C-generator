@@ -274,7 +274,8 @@ export default function PFPGenerator() {
         }
         .backs-glow {
           animation: glow 2s ease-in-out infinite;
-          margin: 2px;
+          margin: 4px;
+          padding: 2px;
         }
         .back-30-glow {
           animation: glow 2s ease-in-out infinite, spin 3s linear infinite;
@@ -472,11 +473,11 @@ export default function PFPGenerator() {
           </div>
 
           {/* Right Traits Panel */}
-          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-3 md:p-4">
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-2 md:p-3">
             <h3 className="text-xl font-semibold text-[#4c1d95] mb-6">Customize Traits</h3>
 
             {/* Category Tabs */}
-            <div className="flex flex-wrap gap-1 md:gap-2 mb-3 md:mb-4 border-b border-gray-200 pb-2 md:pb-3 overflow-x-auto">
+            <div className="flex flex-wrap gap-1 md:gap-2 mb-3 md:mb-4 border-b border-gray-200 pb-2 md:pb-3">
               {Object.entries(assetCategories).map(([category, config]) => (
                 <button
                   key={category}
