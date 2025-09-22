@@ -282,6 +282,7 @@ export default function PFPGenerator() {
           scrollbar-color: rgba(124, 58, 237, 0.35) transparent;
           overscroll-behavior: none;
           scrollbar-gutter: stable;
+
         }
         .trait-grid::-webkit-scrollbar {
           width: 6px;
