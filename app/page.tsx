@@ -285,6 +285,23 @@ export default function PFPGenerator() {
           z-index: -1;
           animation: spin 2s linear infinite reverse;
         }
+        .hat-32-rare {
+          position: relative;
+          background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+        }
+        .hat-32-rare::before {
+          content: '✨';
+          position: absolute;
+          top: -2px;
+          right: -2px;
+          font-size: 10px;
+          z-index: 10;
+          animation: sparkle 3s ease-in-out infinite;
+        }
+        @keyframes sparkle {
+          0%, 100% { opacity: 0.6; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.1); }
+        }
       `}</style>
     <div className="min-h-screen bg-gradient-to-br from-[#ccc4fc] to-[#e0d9ff]">
       {/* Navigation Menu */}
@@ -395,10 +412,10 @@ export default function PFPGenerator() {
               Remove Trait
             </button>
             <button
-              className="px-4 py-2 bg-[#7c3aed] text-white rounded-lg font-medium hover:bg-[#6d28d9] transition-colors"
+              className="px-4 py-2 bg-gradient-to-r from-[#7c3aed] to-[#9333ea] text-white rounded-lg font-medium hover:from-[#6d28d9] hover:to-[#8b5cf6] transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
               onClick={randomizeAll}
             >
-              Randomize All
+              🎲 Randomize All
             </button>
           </div>
         </div>
@@ -495,7 +512,7 @@ export default function PFPGenerator() {
                         selectedTraits[activeCategory] === `${i}`
                           ? "border-[#7c3aed] bg-[#7c3aed]/10"
                           : "border-gray-200 hover:border-[#ccc4fc]"
-                      } ${activeCategory === 'backs' && i === 30 ? 'back-30-glow' : ''}`}
+                      } ${activeCategory === 'backs' && i === 30 ? 'back-30-glow' : ''} ${activeCategory === 'hats' && i === 32 ? 'hat-32-rare' : ''}`}
                       onClick={() => selectTrait(activeCategory, `${i}`)}
                       title={`${assetCategories[activeCategory as keyof typeof assetCategories].name} ${i}`}
                     >
