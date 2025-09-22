@@ -415,7 +415,7 @@ export default function PFPGenerator() {
               Remove Trait
             </button>
             <button
-              className="px-4 py-2 bg-gradient-to-r from-[#7c3aed] to-[#9333ea] text-white rounded-lg font-medium hover:from-[#6d28d9] hover:to-[#8b5cf6] transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 !bg-gradient-to-r !from-[#7c3aed] !to-[#9333ea]"
+              className="px-4 py-2 bg-[#7c3aed] text-white rounded-lg font-medium hover:bg-[#6d28d9] transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
               onClick={randomizeAll}
             >
               🎲 Randomize All
@@ -477,7 +477,7 @@ export default function PFPGenerator() {
                     activeCategory === category
                       ? "bg-[#7c3aed] text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  } ${category === 'backs' ? 'hats-glow' : ''} ${category === 'hats' ? 'hats-glow' : ''}`}
+                  } ${category === 'hats' ? 'hats-glow' : ''}`}
                 >
                   <span>{config.emoji}</span>
                   <span>{config.name}</span>
