@@ -236,7 +236,7 @@ export default function PFPGenerator() {
 
   const handleExternalLinkConfirm = () => {
     setShowExternalLinkConfirm(false)
-    window.open("https://forms.gle/DeqkR9j9CYRS45to6", "_blank")
+    window.open("https://forms.gle/LVNj3wHZ34qJXYVKA", "_blank")
   }
 
   return (
@@ -271,12 +271,12 @@ export default function PFPGenerator() {
         .hats-glow {
           animation: glow 2s ease-in-out infinite;
         }
-        .hat-32-glow {
+        .back-30-glow {
           animation: glow 2s ease-in-out infinite, spin 3s linear infinite;
           border: 3px solid #ffd700 !important;
           position: relative;
         }
-        .hat-32-glow::before {
+        .back-30-glow::before {
           content: '';
           position: absolute;
           inset: -3px;
@@ -457,7 +457,7 @@ export default function PFPGenerator() {
                     activeCategory === category
                       ? "bg-[#7c3aed] text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  } ${category === 'hats' ? 'hats-glow' : ''}`}
+                  } ${category === 'backs' ? 'hats-glow' : ''}`}
                 >
                   <span>{config.emoji}</span>
                   <span>{config.name}</span>
@@ -495,7 +495,7 @@ export default function PFPGenerator() {
                         selectedTraits[activeCategory] === `${i}`
                           ? "border-[#7c3aed] bg-[#7c3aed]/10"
                           : "border-gray-200 hover:border-[#ccc4fc]"
-                      } ${activeCategory === 'hats' && i === 32 ? 'hat-32-glow' : ''}`}
+                      } ${activeCategory === 'backs' && i === 30 ? 'back-30-glow' : ''}`}
                       onClick={() => selectTrait(activeCategory, `${i}`)}
                       title={`${assetCategories[activeCategory as keyof typeof assetCategories].name} ${i}`}
                     >
