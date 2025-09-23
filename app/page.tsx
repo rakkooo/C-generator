@@ -272,14 +272,6 @@ export default function PFPGenerator() {
           box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
           border: 1px solid rgba(255, 215, 0, 0.3) !important;
         }
-        .beards-glow {
-          box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
-          border: 1px solid rgba(34, 197, 94, 0.4) !important;
-        }
-        .backs-glow {
-          box-shadow: 0 0 6px rgba(59, 130, 246, 0.4);
-          border: 1px solid rgba(59, 130, 246, 0.3) !important;
-        }
         .trait-grid {
           scrollbar-width: thin;
           scrollbar-color: rgba(124, 58, 237, 0.35) transparent;
@@ -297,24 +289,19 @@ export default function PFPGenerator() {
           background-color: rgba(124, 58, 237, 0.35);
           border-radius: 9999px;
         }
-        .back-30-glow {
-          box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
-          border: 2px solid rgba(239, 68, 68, 0.4) !important;
-        }
         .beard-31-glow {
-          animation: glow 2s ease-in-out infinite;
-          border: 3px solid #10b981 !important;
+          animation: glow 2s ease-in-out infinite, spin 3s linear infinite;
+          border: 3px solid #ffd700 !important;
           position: relative;
-          background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
         }
         .beard-31-glow::before {
-          content: '💚';
+          content: '';
           position: absolute;
-          top: -2px;
-          right: -2px;
-          font-size: 10px;
-          z-index: 10;
-          animation: sparkle 2.5s ease-in-out infinite;
+          inset: -3px;
+          border-radius: inherit;
+          background: linear-gradient(45deg, #ffd700, #ffed4a, #ffd700);
+          z-index: -1;
+          animation: spin 2s linear infinite reverse;
         }
         .hat-32-rare {
           position: relative;
@@ -510,7 +497,7 @@ export default function PFPGenerator() {
                     activeCategory === category
                       ? "bg-[#7c3aed] text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  } ${category === 'backs' ? 'backs-glow' : ''} ${category === 'beards' ? 'beards-glow' : ''} ${category === 'hats' ? 'hats-glow' : ''}`}
+                  } ${category === 'hats' ? 'hats-glow' : ''}`}
                 >
                   <span>{config.emoji}</span>
                   <span>{config.name}</span>
@@ -551,7 +538,7 @@ export default function PFPGenerator() {
                         selectedTraits[activeCategory] === `${i}`
                           ? "border-[#7c3aed] bg-[#7c3aed]/10"
                           : "border-gray-200 hover:border-[#ccc4fc]"
-                      } ${activeCategory === 'backs' && i === 30 ? 'back-30-glow' : ''} ${activeCategory === 'beards' && i === 31 ? 'beard-31-glow' : ''} ${activeCategory === 'hats' && i === 32 ? 'hat-32-rare' : ''}`}
+                      } ${activeCategory === 'beards' && i === 31 ? 'beard-31-glow' : ''} ${activeCategory === 'hats' && i === 32 ? 'hat-32-rare' : ''}`}
                       onClick={() => selectTrait(activeCategory, `${i}`)}
                       title={`${assetCategories[activeCategory as keyof typeof assetCategories].name} ${i}`}
                     >
