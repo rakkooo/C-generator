@@ -272,6 +272,11 @@ export default function PFPGenerator() {
           box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
           border: 1px solid rgba(255, 215, 0, 0.3) !important;
         }
+        .beards-glow {
+          animation: glow 2s ease-in-out infinite;
+          margin: 4px;
+          padding: 2px;
+        }
         .trait-grid {
           scrollbar-width: thin;
           scrollbar-color: rgba(124, 58, 237, 0.35) transparent;
@@ -497,7 +502,7 @@ export default function PFPGenerator() {
                     activeCategory === category
                       ? "bg-[#7c3aed] text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  } ${category === 'hats' ? 'hats-glow' : ''}`}
+                  } ${category === 'beards' ? 'beards-glow' : ''} ${category === 'hats' ? 'hats-glow' : ''}`}
                 >
                   <span>{config.emoji}</span>
                   <span>{config.name}</span>
