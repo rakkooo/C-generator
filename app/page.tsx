@@ -7,7 +7,7 @@ export default function PFPGenerator() {
 
   const assetCategories = {
     backgrounds: { count: 28, emoji: "🎨", name: "Backgrounds" },
-    backs: { count: 30, emoji: "🔄", name: "Backs" },
+    backs: { count: 31, emoji: "🔄", name: "Backs" },
     beards: { count: 32, emoji: "🧔", name: "Beards" },
     clothes: { count: 31, emoji: "👕", name: "Clothes" },
     eyebrows: { count: 31, emoji: "🤨", name: "Eyebrows" },
@@ -294,12 +294,34 @@ export default function PFPGenerator() {
           background-color: rgba(124, 58, 237, 0.35);
           border-radius: 9999px;
         }
-        .beard-31-glow {
+        .beard-31-rare {
+          position: relative;
+          background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+          box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+          border: 1px solid rgba(255, 215, 0, 0.4) !important;
+        }
+        .beard-31-rare::before {
+          content: '✨';
+          position: absolute;
+          top: -1px;
+          right: -1px;
+          font-size: 8px;
+          z-index: 10;
+          animation: sparkle 3s ease-in-out infinite;
+        }
+        @media (min-width: 768px) {
+          .beard-31-rare::before {
+            top: -2px;
+            right: -2px;
+            font-size: 10px;
+          }
+        }
+        .back-30-glow {
           animation: glow 2s ease-in-out infinite, spin 3s linear infinite;
           border: 3px solid #ffd700 !important;
           position: relative;
         }
-        .beard-31-glow::before {
+        .back-30-glow::before {
           content: '';
           position: absolute;
           inset: -3px;
@@ -543,7 +565,7 @@ export default function PFPGenerator() {
                         selectedTraits[activeCategory] === `${i}`
                           ? "border-[#7c3aed] bg-[#7c3aed]/10"
                           : "border-gray-200 hover:border-[#ccc4fc]"
-                      } ${activeCategory === 'beards' && i === 31 ? 'beard-31-glow' : ''} ${activeCategory === 'hats' && i === 32 ? 'hat-32-rare' : ''}`}
+                      } ${activeCategory === 'beards' && i === 31 ? 'beard-31-rare' : ''} ${activeCategory === 'backs' && i === 30 ? 'back-30-glow' : ''} ${activeCategory === 'hats' && i === 32 ? 'hat-32-rare' : ''}`}
                       onClick={() => selectTrait(activeCategory, `${i}`)}
                       title={`${assetCategories[activeCategory as keyof typeof assetCategories].name} ${i}`}
                     >
