@@ -524,7 +524,7 @@ export default function PFPGenerator() {
                     activeCategory === category
                       ? "bg-[#7c3aed] text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  } ${category === 'beards' ? 'beards-glow' : ''} ${category === 'hats' ? 'hats-glow' : ''}`}
+                  } ${category === 'beards' ? 'hats-glow' : ''} ${category === 'backs' ? 'beards-glow' : ''} ${category === 'hats' ? 'hats-glow' : ''}`}
                 >
                   <span>{config.emoji}</span>
                   <span>{config.name}</span>
