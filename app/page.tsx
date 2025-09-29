@@ -9,7 +9,7 @@ export default function PFPGenerator() {
     backgrounds: { count: 28, emoji: "🎨", name: "Backgrounds" },
     backs: { count: 31, emoji: "🔄", name: "Backs" },
     beards: { count: 32, emoji: "🧔", name: "Beards" },
-    clothes: { count: 31, emoji: "👕", name: "Clothes" },
+    clothes: { count: 32, emoji: "👕", name: "Clothes" },
     eyebrows: { count: 31, emoji: "🤨", name: "Eyebrows" },
     eyes: { count: 31, emoji: "👀", name: "Eyes" },
     faces: { count: 1, emoji: "😊", name: "Faces" },
