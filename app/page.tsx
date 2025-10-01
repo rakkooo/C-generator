@@ -273,6 +273,10 @@ export default function PFPGenerator() {
           border: 1px solid rgba(255, 215, 0, 0.3) !important;
         }
         .beards-glow {
+          box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+          border: 1px solid rgba(255, 215, 0, 0.3) !important;
+        }
+        .clothes-glow {
           animation: glow 2s ease-in-out infinite;
           margin: 4px;
           padding: 2px;
@@ -317,11 +321,33 @@ export default function PFPGenerator() {
           }
         }
         .back-30-glow {
+          position: relative;
+          background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+          box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+          border: 1px solid rgba(255, 215, 0, 0.4) !important;
+        }
+        .back-30-glow::before {
+          content: '✨';
+          position: absolute;
+          top: -1px;
+          right: -1px;
+          font-size: 8px;
+          z-index: 10;
+          animation: sparkle 3s ease-in-out infinite;
+        }
+        @media (min-width: 768px) {
+          .back-30-glow::before {
+            top: -2px;
+            right: -2px;
+            font-size: 10px;
+          }
+        }
+        .clothes-31-rare {
           animation: glow 2s ease-in-out infinite, spin 3s linear infinite;
           border: 3px solid #ffd700 !important;
           position: relative;
         }
-        .back-30-glow::before {
+        .clothes-31-rare::before {
           content: '';
           position: absolute;
           inset: -3px;
@@ -524,7 +550,7 @@ export default function PFPGenerator() {
                     activeCategory === category
                       ? "bg-[#7c3aed] text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  } ${category === 'beards' ? 'hats-glow' : ''} ${category === 'backs' ? 'beards-glow' : ''} ${category === 'hats' ? 'hats-glow' : ''}`}
+                  } ${category === 'beards' ? 'hats-glow' : ''} ${category === 'backs' ? 'beards-glow' : ''} ${category === 'hats' ? 'hats-glow' : ''} ${category === 'clothes' ? 'clothes-glow' : ''}`}
                 >
                   <span>{config.emoji}</span>
                   <span>{config.name}</span>
@@ -565,7 +591,7 @@ export default function PFPGenerator() {
                         selectedTraits[activeCategory] === `${i}`
                           ? "border-[#7c3aed] bg-[#7c3aed]/10"
                           : "border-gray-200 hover:border-[#ccc4fc]"
-                      } ${activeCategory === 'beards' && i === 31 ? 'beard-31-rare' : ''} ${activeCategory === 'backs' && i === 30 ? 'back-30-glow' : ''} ${activeCategory === 'hats' && i === 32 ? 'hat-32-rare' : ''}`}
+                      } ${activeCategory === 'beards' && i === 31 ? 'beard-31-rare' : ''} ${activeCategory === 'backs' && i === 30 ? 'back-30-glow' : ''} ${activeCategory === 'hats' && i === 32 ? 'hat-32-rare' : ''} ${activeCategory === 'clothes' && i === 31 ? 'clothes-31-rare' : ''}`}
                       onClick={() => selectTrait(activeCategory, `${i}`)}
                       title={`${assetCategories[activeCategory as keyof typeof assetCategories].name} ${i}`}
                     >
