@@ -269,12 +269,12 @@ export default function PFPGenerator() {
           to { transform: rotate(360deg); }
         }
         .hats-glow {
-          box-shadow: 0 0 15px rgba(255, 215, 0, 0.6), 0 0 25px rgba(255, 215, 0, 0.3);
-          border: 2px solid rgba(255, 215, 0, 0.5) !important;
+          box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+          border: 1px solid rgba(255, 215, 0, 0.3) !important;
         }
         .beards-glow {
-          box-shadow: 0 0 15px rgba(255, 215, 0, 0.6), 0 0 25px rgba(255, 215, 0, 0.3);
-          border: 2px solid rgba(255, 215, 0, 0.5) !important;
+          box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+          border: 1px solid rgba(255, 215, 0, 0.3) !important;
         }
         .clothes-glow {
           animation: glow 2s ease-in-out infinite;
