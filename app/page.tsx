@@ -14,7 +14,7 @@ export default function PFPGenerator() {
     eyes: { count: 32, emoji: "👀", name: "Eyes" },
     faces: { count: 1, emoji: "😊", name: "Faces" },
     hats: { count: 33, emoji: "🎩", name: "Hats" },
-    mouths: { count: 32, emoji: "👄", name: "Mouths" },
+    mouths: { count: 33, emoji: "👄", name: "Mouths" },
   }
 
   // State management
