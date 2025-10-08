@@ -14,7 +14,7 @@ export default function PFPGenerator() {
     eyes: { count: 32, emoji: "👀", name: "Eyes" },
     faces: { count: 1, emoji: "😊", name: "Faces" },
     hats: { count: 33, emoji: "🎩", name: "Hats" },
-    mouths: { count: 33, emoji: "👄", name: "Mouths" }, // ← mouths count stays 33 (index 0..32)
+    mouths: { count: 33, emoji: "👄", name: "Mouths" },
   }
 
   // State management
@@ -100,15 +100,23 @@ export default function PFPGenerator() {
 
     for (const category of drawOrder) {
       const traitValue = selectedTraits[category]
+      console.log(`Processing ${category}: ${traitValue}`)
       if (traitValue && traitValue !== "none") {
         try {
           const img = new Image()
           img.crossOrigin = "anonymous"
           const imagePath = generateAssetPath(category, Number.parseInt(traitValue))
+          console.log(`Loading image: ${imagePath}`)
 
           await new Promise((resolve, reject) => {
-            img.onload = () => resolve(null)
-            img.onerror = (e) => reject(e)
+            img.onload = () => {
+              console.log(`Successfully loaded ${category} image`)
+              resolve(null)
+            }
+            img.onerror = (e) => {
+              console.error(`Failed to load ${category} image:`, e)
+              reject(e)
+            }
             img.src = imagePath
           })
 
@@ -122,6 +130,7 @@ export default function PFPGenerator() {
           const scaledWidth = img.width * baseScale
           const scaledHeight = img.height * baseScale
 
+          console.log(`Drawing ${category} at position (${transform.x}, ${transform.y}) with size ${scaledWidth}x${scaledHeight}`)
           // Draw image centered at the transform position
           ctx.drawImage(img, transform.x - scaledWidth / 2, transform.y - scaledHeight / 2, scaledWidth, scaledHeight)
         } catch (error) {
@@ -227,7 +236,7 @@ export default function PFPGenerator() {
 
   const handleExternalLinkConfirm = () => {
     setShowExternalLinkConfirm(false)
-    window.open("https://forms.gle/Ad1dDJTaunuynBkn7", "_blank")
+    window.open("https://forms.gle/NaJcecU6fD9RDLaXA", "_blank")
   }
 
   return (
@@ -238,9 +247,13 @@ export default function PFPGenerator() {
           50% { background-position: 100% 50% }
           100% { background-position: 0% 50% }
         }
-        .animate-rainbow { background-size: 400% 400%; animation: rainbow 3s ease infinite; }
-        .animate-rainbow:hover { animation: rainbow 1s ease infinite; }
-
+        .animate-rainbow {
+          background-size: 400% 400%;
+          animation: rainbow 3s ease infinite;
+        }
+        .animate-rainbow:hover {
+          animation: rainbow 1s ease infinite;
+        }
         @keyframes glow {
           0%, 100% { 
             box-shadow: 0 0 5px #ffd700, 0 0 10px #ffd700, 0 0 15px #ffd700, 0 0 20px #ffd700;
@@ -255,8 +268,6 @@ export default function PFPGenerator() {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
-
-        /* ===== Small decorations ===== */
         .hats-glow {
           box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
           border: 1px solid rgba(255, 215, 0, 0.3) !important;
@@ -265,35 +276,32 @@ export default function PFPGenerator() {
           box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
           border: 1px solid rgba(255, 215, 0, 0.3) !important;
         }
-
-        /* Clothes tab was LARGE before. Now Clothes = small decoration. */
-        /* Keep a dedicated small class in case you want to style differently later */
-        .clothes-small-glow {
-          box-shadow: 0 0 8px rgba(255, 215, 0, 0.35);
-          border: 1px solid rgba(255, 215, 0, 0.25) !important;
+        .clothes-glow {
+          box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+          border: 1px solid rgba(255, 215, 0, 0.3) !important;
         }
-
-        /* ===== LARGE decorations for category tab (moved to Mouths) ===== */
         .mouths-glow {
           animation: glow 2s ease-in-out infinite;
           margin: 4px;
           padding: 2px;
         }
-
         .trait-grid {
           scrollbar-width: thin;
           scrollbar-color: rgba(124, 58, 237, 0.35) transparent;
           overscroll-behavior: none;
           scrollbar-gutter: stable;
+
         }
-        .trait-grid::-webkit-scrollbar { width: 6px; }
-        .trait-grid::-webkit-scrollbar-track { background: transparent; }
+        .trait-grid::-webkit-scrollbar {
+          width: 6px;
+        }
+        .trait-grid::-webkit-scrollbar-track {
+          background: transparent;
+        }
         .trait-grid::-webkit-scrollbar-thumb {
           background-color: rgba(124, 58, 237, 0.35);
           border-radius: 9999px;
         }
-
-        /* ===== Small rare items (sparkle) ===== */
         .beard-31-rare {
           position: relative;
           background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
@@ -303,12 +311,19 @@ export default function PFPGenerator() {
         .beard-31-rare::before {
           content: '✨';
           position: absolute;
-          top: -1px; right: -1px;
+          top: -1px;
+          right: -1px;
           font-size: 8px;
           z-index: 10;
           animation: sparkle 3s ease-in-out infinite;
         }
-
+        @media (min-width: 768px) {
+          .beard-31-rare::before {
+            top: -2px;
+            right: -2px;
+            font-size: 10px;
+          }
+        }
         .back-30-glow {
           position: relative;
           background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
@@ -318,49 +333,45 @@ export default function PFPGenerator() {
         .back-30-glow::before {
           content: '✨';
           position: absolute;
-          top: -1px; right: -1px;
+          top: -1px;
+          right: -1px;
           font-size: 8px;
           z-index: 10;
           animation: sparkle 3s ease-in-out infinite;
         }
-
-        /* ===== Clothes_31 was LARGE; switch to SMALL sparkle (no spin, thin border) ===== */
+        @media (min-width: 768px) {
+          .back-30-glow::before {
+            top: -2px;
+            right: -2px;
+            font-size: 10px;
+          }
+        }
         .clothes-31-rare {
-          position: relative;
-          background: linear-gradient(135deg, #fff7d6 0%, #ffef99 100%);
-          box-shadow: 0 0 10px rgba(255, 215, 0, 0.25);
-          border: 1px solid rgba(255, 215, 0, 0.35) !important;
-        }
-        .clothes-31-rare::before {
-          content: '✨';
-          position: absolute;
-          top: -1px; right: -1px;
-          font-size: 8px;
-          z-index: 10;
-          animation: sparkle 3s ease-in-out infinite;
-        }
-
-        .hat-32-rare {
           position: relative;
           background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
           box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
           border: 1px solid rgba(255, 215, 0, 0.4) !important;
         }
-        .hat-32-rare::before {
+        .clothes-31-rare::before {
           content: '✨';
           position: absolute;
-          top: -1px; right: -1px;
+          top: -1px;
+          right: -1px;
           font-size: 8px;
           z-index: 10;
           animation: sparkle 3s ease-in-out infinite;
         }
-
-        /* ===== NEW: Mouth_32 LARGE decoration (spin + strong glow) ===== */
+        @media (min-width: 768px) {
+          .clothes-31-rare::before {
+            top: -2px;
+            right: -2px;
+            font-size: 10px;
+          }
+        }
         .mouth-32-rare {
-          position: relative;
-          background: linear-gradient(135deg, #fff2b3 0%, #ffe066 100%);
           animation: glow 2s ease-in-out infinite, spin 3s linear infinite;
           border: 3px solid #ffd700 !important;
+          position: relative;
         }
         .mouth-32-rare::before {
           content: '';
@@ -371,293 +382,298 @@ export default function PFPGenerator() {
           z-index: -1;
           animation: spin 2s linear infinite reverse;
         }
-
-        @media (min-width: 768px) {
-          .beard-31-rare::before,
-          .back-30-glow::before { top: -2px; right: -2px; font-size: 10px; }
+        .hat-32-rare {
+          position: relative;
+          background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+          box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+          border: 1px solid rgba(255, 215, 0, 0.4) !important;
         }
-
+        .hat-32-rare::before {
+          content: '✨';
+          position: absolute;
+          top: -1px;
+          right: -1px;
+          font-size: 8px;
+          z-index: 10;
+          animation: sparkle 3s ease-in-out infinite;
+        }
+        @media (min-width: 768px) {
+          .hat-32-rare::before {
+            top: -2px;
+            right: -2px;
+            font-size: 10px;
+          }
+        }
         @keyframes sparkle {
           0%, 100% { opacity: 0.6; transform: scale(1); }
           50% { opacity: 1; transform: scale(1.1); }
         }
       `}</style>
+    <div className="min-h-screen bg-gradient-to-br from-[#ccc4fc] to-[#e0d9ff]">
+      {/* Navigation Menu */}
+      <nav className="w-full bg-white/20 backdrop-blur-sm border-b border-white/30 px-8 py-4 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <a href="/" className="font-bold text-xl text-[#4c1d95] no-underline flex items-center gap-3">
+            <img
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/C_logo-5mhxDq9n4PD990VYBS2AcepZNWFu5l.png"
+              alt="C-generator Logo"
+              className="w-8 h-8"
+            />
+            C-generator
+          </a>
+          <div className="text-[#4c1d95] font-medium text-sm">The Ultimate PFP Generator</div>
+        </div>
+      </nav>
 
-      <div className="min-h-screen bg-gradient-to-br from-[#ccc4fc] to-[#e0d9ff]">
-        {/* Navigation Menu */}
-        <nav className="w-full bg-white/20 backdrop-blur-sm border-b border-white/30 px-8 py-4 sticky top-0 z-40">
-          <div className="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="/" className="font-bold text-xl text-[#4c1d95] no-underline flex items-center gap-3">
-              <img
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/C_logo-5mhxDq9n4PD990VYBS2AcepZNWFu5l.png"
-                alt="C-generator Logo"
-                className="w-8 h-8"
-              />
-              C-generator
-            </a>
-            <div className="text-[#4c1d95] font-medium text-sm">The Ultimate PFP Generator</div>
-          </div>
-        </nav>
-
-        {/* Main Content */}
-        <main className="max-w-7xl mx-auto px-2 md:px-4 py-4 md:py-8">
-          {/* Current Trait Display */}
-          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg px-4 py-5 md:px-6 md:py-7 mb-4 md:mb-8">
-            <h3 className="text-lg font-semibold text-[#4c1d95] mb-6 tracking-tight">Current Selection</h3>
-            <div className="flex gap-6">
-              <div className="flex-1">
-                <div className="mb-4">
-                  <div className="font-medium text-[#6d28d9]">{currentTraitControls.name}</div>
-                  <div className="text-sm text-gray-600">{currentTraitControls.category}</div>
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-2 md:px-4 py-4 md:py-8">
+        {/* Current Trait Display */}
+        <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg px-4 py-5 md:px-6 md:py-7 mb-4 md:mb-8">
+          <h3 className="text-lg font-semibold text-[#4c1d95] mb-6 tracking-tight">Current Selection</h3>
+          <div className="flex gap-6">
+            <div className="flex-1">
+              <div className="mb-4">
+                <div className="font-medium text-[#6d28d9]">{currentTraitControls.name}</div>
+                <div className="text-sm text-gray-600">{currentTraitControls.category}</div>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <label className="text-sm font-medium text-gray-700 w-12">Size:</label>
+                  <input
+                    type="range"
+                    className="flex-1"
+                    min="0.1"
+                    max="2"
+                    step="0.1"
+                    value={currentTraitControls.size}
+                    disabled={!currentTraitControls.isVisible}
+                    onChange={(e) => updateTraitTransform("scale", Number.parseFloat(e.target.value))}
+                  />
+                  <span className="text-sm text-gray-600 w-8">{currentTraitControls.size.toFixed(1)}</span>
                 </div>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <label className="text-sm font-medium text-gray-700 w-12">Size:</label>
-                    <input
-                      type="range"
-                      className="flex-1"
-                      min="0.1"
-                      max="2"
-                      step="0.1"
-                      value={currentTraitControls.size}
-                      disabled={!currentTraitControls.isVisible}
-                      onChange={(e) => updateTraitTransform("scale", Number.parseFloat(e.target.value))}
-                    />
-                    <span className="text-sm text-gray-600 w-8">{currentTraitControls.size.toFixed(1)}</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <label className="text-sm font-medium text-gray-700 w-12">X:</label>
-                    <input
-                      type="range"
-                      className="flex-1"
-                      min="0"
-                      max="350"
-                      step="1"
-                      value={currentTraitControls.x}
-                      disabled={!currentTraitControls.isVisible}
-                      onChange={(e) => updateTraitTransform("x", Number.parseInt(e.target.value))}
-                    />
-                    <span className="text-sm text-gray-600 w-8">{currentTraitControls.x}</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <label className="text-sm font-medium text-gray-700 w-12">Y:</label>
-                    <input
-                      type="range"
-                      className="flex-1"
-                      min="0"
-                      max="350"
-                      step="1"
-                      value={currentTraitControls.y}
-                      disabled={!currentTraitControls.isVisible}
-                      onChange={(e) => updateTraitTransform("y", Number.parseInt(e.target.value))}
-                    />
-                    <span className="text-sm text-gray-600 w-8">{currentTraitControls.y}</span>
-                  </div>
+                <div className="flex items-center gap-3">
+                  <label className="text-sm font-medium text-gray-700 w-12">X:</label>
+                  <input
+                    type="range"
+                    className="flex-1"
+                    min="0"
+                    max="350"
+                    step="1"
+                    value={currentTraitControls.x}
+                    disabled={!currentTraitControls.isVisible}
+                    onChange={(e) => updateTraitTransform("x", Number.parseInt(e.target.value))}
+                  />
+                  <span className="text-sm text-gray-600 w-8">{currentTraitControls.x}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <label className="text-sm font-medium text-gray-700 w-12">Y:</label>
+                  <input
+                    type="range"
+                    className="flex-1"
+                    min="0"
+                    max="350"
+                    step="1"
+                    value={currentTraitControls.y}
+                    disabled={!currentTraitControls.isVisible}
+                    onChange={(e) => updateTraitTransform("y", Number.parseInt(e.target.value))}
+                  />
+                  <span className="text-sm text-gray-600 w-8">{currentTraitControls.y}</span>
                 </div>
               </div>
-              <div className="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center">
-                {currentTraitControls.previewSrc ? (
-                  <img
-                    src={currentTraitControls.previewSrc || "/placeholder.svg"}
-                    alt="Preview"
-                    className="w-full h-full object-contain rounded"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement
-                      target.style.display = "none"
-                      target.parentElement!.innerHTML = '<div class="text-xs text-gray-500">No Preview</div>'
-                    }}
-                  />
-                ) : (
-                  <div className="text-xs text-gray-500">No Preview</div>
+            </div>
+            <div className="w-24 h-24 bg-gray-100 rounded-lg flex items-center justify-center">
+              {currentTraitControls.previewSrc ? (
+                <img
+                  src={currentTraitControls.previewSrc || "/placeholder.svg"}
+                  alt="Preview"
+                  className="w-full h-full object-contain rounded"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement
+                    target.style.display = "none"
+                    target.parentElement!.innerHTML = '<div class="text-xs text-gray-500">No Preview</div>'
+                  }}
+                />
+              ) : (
+                <div className="text-xs text-gray-500">No Preview</div>
+              )}
+            </div>
+          </div>
+          <div className="flex gap-2 mt-6">
+            <button
+              className="px-4 py-2 bg-[#ccc4fc] text-[#4c1d95] rounded-lg font-medium hover:bg-[#b8aef7] transition-colors disabled:opacity-50"
+              disabled={!currentTraitControls.isVisible}
+              onClick={resetTraitPosition}
+            >
+              Reset Position
+            </button>
+            <button
+              className="px-4 py-2 bg-red-100 text-red-700 rounded-lg font-medium hover:bg-red-200 transition-colors disabled:opacity-50"
+              disabled={!currentTraitControls.isVisible}
+              onClick={removeTrait}
+            >
+              Remove Trait
+            </button>
+            <button
+              className="px-4 py-2 text-white rounded-lg font-medium bg-[#7c3aed] hover:bg-[#6d28d9] transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+              onClick={randomizeAll}
+            >
+              🎲 Randomize All
+            </button>
+          </div>
+        </div>
+
+        {/* Generator Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
+          {/* Left Canvas Panel */}
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg px-4 py-5 md:px-6 md:py-7">
+            <h3 className="text-xl font-semibold text-[#4c1d95] mb-6 tracking-tight">Your Character</h3>
+            <div className="text-center">
+              <canvas
+                ref={canvasRef}
+                width="350"
+                height="350"
+                className="border-2 border-[#ccc4fc]/30 rounded-lg mx-auto mb-4 cursor-crosshair bg-white"
+              />
+              <p className="text-sm text-gray-600 mb-4">Character is ready for customization!</p>
+              <div className="text-xs text-gray-500 bg-[#ccc4fc]/10 p-3 rounded-lg">
+                Click on any trait icon to select and customize it. Use the controls above to adjust size and position.
+              </div>
+            </div>
+
+            {/* Download Section */}
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold text-[#4c1d95] mb-3 flex items-center gap-2">
+                <span>💾</span>Download
+              </h3>
+              <div className="flex flex-col gap-3">
+                <button
+                  className="w-full px-4 py-2 bg-[#7c3aed] text-white rounded-lg font-medium hover:bg-[#6d28d9] transition-colors"
+                  onClick={downloadPFP}
+                >
+                  Download PNG PFP
+                </button>
+                <button 
+                  onClick={handleSubmitClick}
+                  className="w-full px-8 py-4 bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 via-indigo-500 to-purple-500 text-white rounded-xl font-bold text-xl shadow-2xl hover:shadow-3xl transition-all duration-300 animate-pulse hover:scale-110 hover:-translate-y-1 cursor-pointer border-4 border-white animate-rainbow relative overflow-hidden">
+                  <span className="relative z-10 drop-shadow-lg">🎉 Submit 🎉</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-50 transform -skew-x-12"></div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Traits Panel */}
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg px-4 py-5 md:px-6 md:py-7">
+            <h3 className="text-xl font-semibold text-[#4c1d95] mb-6 tracking-tight">Customize Traits</h3>
+
+            {/* Category Tabs */}
+            <div className="flex flex-wrap gap-1.5 md:gap-2.5 mb-4 md:mb-6 border-b border-gray-200 pb-3 md:pb-4">
+              {Object.entries(assetCategories).map(([category, config]) => (
+                <button
+                  key={category}
+                  onClick={() => setActiveCategory(category)}
+                  className={`flex items-center gap-1 md:gap-2 px-2 md:px-3 py-1 md:py-2 rounded-lg font-medium transition-colors text-xs md:text-sm whitespace-nowrap ${
+                    activeCategory === category
+                      ? "bg-[#7c3aed] text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  } ${category === 'beards' ? 'hats-glow' : ''} ${category === 'backs' ? 'beards-glow' : ''} ${category === 'hats' ? 'hats-glow' : ''} ${category === 'clothes' ? 'clothes-glow' : ''} ${category === 'mouths' ? 'mouths-glow' : ''}`}
+                >
+                  <span>{config.emoji}</span>
+                  <span>{config.name}</span>
+                  <span className="text-xs opacity-70">({config.count})</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Active Category Content */}
+            <div className="min-h-[300px]">
+              <div className="mb-4">
+                <h4 className="text-lg font-medium text-[#4c1d95] flex items-center gap-2">
+                  <span>{assetCategories[activeCategory as keyof typeof assetCategories].emoji}</span>
+                  {assetCategories[activeCategory as keyof typeof assetCategories].name}
+                </h4>
+                <p className="text-sm text-gray-600">
+                  Choose from {assetCategories[activeCategory as keyof typeof assetCategories].count} options
+                </p>
+              </div>
+
+              <div
+                className="trait-grid grid grid-cols-5 md:grid-cols-6 gap-1.5 md:gap-3 max-h-80 overflow-y-auto pr-1"
+                id={`${activeCategory}Icons`}
+              >
+                <div
+                  className="w-11 h-11 md:w-14 md:h-14 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-200 transition-colors border-2 border-[#ccc4fc] hover:border-[#7c3aed]"
+                  onClick={() => selectTrait(activeCategory, "none")}
+                  title="None"
+                >
+                  <span className="text-gray-500 text-lg">✕</span>
+                </div>
+                {Array.from(
+                  { length: assetCategories[activeCategory as keyof typeof assetCategories].count },
+                  (_, i) => (
+                    <div
+                      key={i}
+                      className={`w-11 h-11 md:w-14 md:h-14 bg-gray-50 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors border-2 ${
+                        selectedTraits[activeCategory] === `${i}`
+                          ? "border-[#7c3aed] bg-[#7c3aed]/10"
+                          : "border-gray-200 hover:border-[#ccc4fc]"
+                      } ${activeCategory === 'beards' && i === 31 ? 'beard-31-rare' : ''} ${activeCategory === 'backs' && i === 30 ? 'back-30-glow' : ''} ${activeCategory === 'hats' && i === 32 ? 'hat-32-rare' : ''} ${activeCategory === 'clothes' && i === 31 ? 'clothes-31-rare' : ''} ${activeCategory === 'mouths' && i === 32 ? 'mouth-32-rare' : ''}`}
+                      onClick={() => selectTrait(activeCategory, `${i}`)}
+                      title={`${assetCategories[activeCategory as keyof typeof assetCategories].name} ${i}`}
+                    >
+                      <img
+                        src={generateAssetPath(activeCategory, i) || "/placeholder.svg"}
+                        alt={`${assetCategories[activeCategory as keyof typeof assetCategories].name} ${i}`}
+                        className="w-9 h-9 md:w-12 md:h-12 object-contain"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement
+                          target.style.display = "none"
+                          target.parentElement!.innerHTML = `<span class="text-xs font-medium text-gray-600">${i}</span>`
+                        }}
+                      />
+                    </div>
+                  ),
                 )}
               </div>
             </div>
-            <div className="flex gap-2 mt-6">
-              <button
-                className="px-4 py-2 bg-[#ccc4fc] text-[#4c1d95] rounded-lg font-medium hover:bg-[#b8aef7] transition-colors disabled:opacity-50"
-                disabled={!currentTraitControls.isVisible}
-                onClick={resetTraitPosition}
-              >
-                Reset Position
-              </button>
-              <button
-                className="px-4 py-2 bg-red-100 text-red-700 rounded-lg font-medium hover:bg-red-200 transition-colors disabled:opacity-50"
-                disabled={!currentTraitControls.isVisible}
-                onClick={removeTrait}
-              >
-                Remove Trait
-              </button>
-              <button
-                className="px-4 py-2 text-white rounded-lg font-medium bg-[#7c3aed] hover:bg-[#6d28d9] transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
-                onClick={randomizeAll}
-              >
-                🎲 Randomize All
-              </button>
-            </div>
           </div>
+        </div>
+      </main>
 
-          {/* Generator Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
-            {/* Left Canvas Panel */}
-            <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg px-4 py-5 md:px-6 md:py-7">
-              <h3 className="text-xl font-semibold text-[#4c1d95] mb-6 tracking-tight">Your Character</h3>
-              <div className="text-center">
-                <canvas
-                  ref={canvasRef}
-                  width="350"
-                  height="350"
-                  className="border-2 border-[#ccc4fc]/30 rounded-lg mx-auto mb-4 cursor-crosshair bg-white"
-                />
-                <p className="text-sm text-gray-600 mb-4">Character is ready for customization!</p>
-                <div className="text-xs text-gray-500 bg-[#ccc4fc]/10 p-3 rounded-lg">
-                  Click on any trait icon to select and customize it. Use the controls above to adjust size and position.
+      {/* External Link Confirmation Modal */}
+      {showExternalLinkConfirm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowExternalLinkConfirm(false)}>
+          <div className="bg-white rounded-xl p-6 max-w-md mx-4 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="text-center">
+              <div className="mb-4">
+                <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <span className="text-2xl">⚠️</span>
                 </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">External Link</h3>
+                <p className="text-gray-600 text-sm">
+                  You will be redirected to a Google Form.<br/>
+                  Do you want to continue?
+                </p>
               </div>
-
-              {/* Download Section */}
-              <div className="mt-6">
-                <h3 className="text-lg font-semibold text-[#4c1d95] mb-3 flex items-center gap-2">
-                  <span>💾</span>Download
-                </h3>
-                <div className="flex flex-col gap-3">
-                  <button
-                    className="w-full px-4 py-2 bg-[#7c3aed] text-white rounded-lg font-medium hover:bg-[#6d28d9] transition-colors"
-                    onClick={downloadPFP}
-                  >
-                    Download PNG PFP
-                  </button>
-                  <button 
-                    onClick={handleSubmitClick}
-                    className="w-full px-8 py-4 bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 via-indigo-500 to-purple-500 text-white rounded-xl font-bold text-xl shadow-2xl hover:shadow-3xl transition-all duration-300 animate-pulse hover:scale-110 hover:-translate-y-1 cursor-pointer border-4 border-white animate-rainbow relative overflow-hidden">
-                    <span className="relative z-10 drop-shadow-lg">🎉 Submit 🎉</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-50 transform -skew-x-12"></div>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Traits Panel */}
-            <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg px-4 py-5 md:px-6 md:py-7">
-              <h3 className="text-xl font-semibold text-[#4c1d95] mb-6 tracking-tight">Customize Traits</h3>
-
-              {/* Category Tabs */}
-              <div className="flex flex-wrap gap-1.5 md:gap-2.5 mb-4 md:mb-6 border-b border-gray-200 pb-3 md:pb-4">
-                {Object.entries(assetCategories).map(([category, config]) => (
-                  <button
-                    key={category}
-                    onClick={() => setActiveCategory(category)}
-                    className={`flex items-center gap-1 md:gap-2 px-2 md:px-3 py-1 md:py-2 rounded-lg font-medium transition-colors text-xs md:text-sm whitespace-nowrap ${
-                      activeCategory === category
-                        ? "bg-[#7c3aed] text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    } 
-                    ${category === 'beards' ? 'hats-glow' : ''} 
-                    ${category === 'backs' ? 'beards-glow' : ''} 
-                    ${category === 'hats' ? 'hats-glow' : ''} 
-                    ${category === 'clothes' ? 'clothes-small-glow' : ''} 
-                    ${category === 'mouths' ? 'mouths-glow' : ''}`}  {/* ← LARGE tab decoration moved to Mouths */}
-                  >
-                    <span>{config.emoji}</span>
-                    <span>{config.name}</span>
-                    <span className="text-xs opacity-70">({config.count})</span>
-                  </button>
-                ))}
-              </div>
-
-              {/* Active Category Content */}
-              <div className="min-h-[300px]">
-                <div className="mb-4">
-                  <h4 className="text-lg font-medium text-[#4c1d95] flex items-center gap-2">
-                    <span>{assetCategories[activeCategory as keyof typeof assetCategories].emoji}</span>
-                    {assetCategories[activeCategory as keyof typeof assetCategories].name}
-                  </h4>
-                  <p className="text-sm text-gray-600">
-                    Choose from {assetCategories[activeCategory as keyof typeof assetCategories].count} options
-                  </p>
-                </div>
-
-                <div
-                  className="trait-grid grid grid-cols-5 md:grid-cols-6 gap-1.5 md:gap-3 max-h-80 overflow-y-auto pr-1"
-                  id={`${activeCategory}Icons`}
+              <div className="flex gap-3">
+                <button 
+                  onClick={() => setShowExternalLinkConfirm(false)}
+                  className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg font-medium hover:bg-gray-300 transition-colors"
                 >
-                  <div
-                    className="w-11 h-11 md:w-14 md:h-14 bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-200 transition-colors border-2 border-[#ccc4fc] hover:border-[#7c3aed]"
-                    onClick={() => selectTrait(activeCategory, "none")}
-                    title="None"
-                  >
-                    <span className="text-gray-500 text-lg">✕</span>
-                  </div>
-                  {Array.from(
-                    { length: assetCategories[activeCategory as keyof typeof assetCategories].count },
-                    (_, i) => (
-                      <div
-                        key={i}
-                        className={`w-11 h-11 md:w-14 md:h-14 bg-gray-50 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors border-2 ${
-                          selectedTraits[activeCategory] === `${i}`
-                            ? "border-[#7c3aed] bg-[#7c3aed]/10"
-                            : "border-gray-200 hover:border-[#ccc4fc]"
-                        } 
-                        ${activeCategory === 'beards' && i === 31 ? 'beard-31-rare' : ''} 
-                        ${activeCategory === 'backs' && i === 30 ? 'back-30-glow' : ''} 
-                        ${activeCategory === 'hats' && i === 32 ? 'hat-32-rare' : ''} 
-                        ${activeCategory === 'clothes' && i === 31 ? 'clothes-31-rare' : ''} 
-                        ${activeCategory === 'mouths' && i === 32 ? 'mouth-32-rare' : ''}`}  {/* ← NEW: large decoration for mouth_32 */}
-                        onClick={() => selectTrait(activeCategory, `${i}`)}
-                        title={`${assetCategories[activeCategory as keyof typeof assetCategories].name} ${i}`}
-                      >
-                        <img
-                          src={generateAssetPath(activeCategory, i) || "/placeholder.svg"}
-                          alt={`${assetCategories[activeCategory as keyof typeof assetCategories].name} ${i}`}
-                          className="w-9 h-9 md:w-12 md:h-12 object-contain"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement
-                            target.style.display = "none"
-                            target.parentElement!.innerHTML = `<span class="text-xs font-medium text-gray-600">${i}</span>`
-                          }}
-                        />
-                      </div>
-                    ),
-                  )}
-                </div>
+                  Cancel
+                </button>
+                <button 
+                  onClick={handleExternalLinkConfirm}
+                  className="flex-1 px-4 py-2 bg-[#7c3aed] text-white rounded-lg font-medium hover:bg-[#6d28d9] transition-colors"
+                >
+                  Continue
+                </button>
               </div>
             </div>
           </div>
-        </main>
-
-        {/* External Link Confirmation Modal */}
-        {showExternalLinkConfirm && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowExternalLinkConfirm(false)}>
-            <div className="bg-white rounded-xl p-6 max-w-md mx-4 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-              <div className="text-center">
-                <div className="mb-4">
-                  <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-2xl">⚠️</span>
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">External Link</h3>
-                  <p className="text-gray-600 text-sm">
-                    You will be redirected to a Google Form.<br/>
-                    Do you want to continue?
-                  </p>
-                </div>
-                <div className="flex gap-3">
-                  <button 
-                    onClick={() => setShowExternalLinkConfirm(false)}
-                    className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg font-medium hover:bg-gray-300 transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <button 
-                    onClick={handleExternalLinkConfirm}
-                    className="flex-1 px-4 py-2 bg-[#7c3aed] text-white rounded-lg font-medium hover:bg-[#6d28d9] transition-colors"
-                  >
-                    Continue
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
+    </div>
     </>
   )
 }
