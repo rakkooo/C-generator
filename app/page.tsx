@@ -264,7 +264,10 @@ export default function PFPGenerator() {
             border-color: #ffed4a;
           }
         }
-        @keyframes spin {
+                .backs-glow {
+          box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+          border: 1px solid rgba(255, 215, 0, 0.3) !important;
+        }@keyframes spin {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
@@ -284,6 +287,7 @@ export default function PFPGenerator() {
           animation: glow 2s ease-in-out infinite;
           margin: 4px;
           padding: 2px;
+          border: 1px solid rgba(255, 215, 0, 0.3) !important;
         }
         .trait-grid {
           scrollbar-width: thin;
@@ -585,7 +589,7 @@ export default function PFPGenerator() {
                     activeCategory === category
                       ? "bg-[#7c3aed] text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  } ${category === 'beards' ? 'hats-glow' : ''} ${category === 'backs' ? 'beards-glow' : ''} ${category === 'hats' ? 'hats-glow' : ''} ${category === 'clothes' ? 'clothes-glow' : ''} ${category === 'mouths' ? 'mouths-glow' : ''} ${category === 'faces' ? 'faces-major' : ''}`}
+                  } ${category === 'beards' ? 'beards-glow' : ''} ${category === 'backs' ? 'backs-glow' : ''} ${category === 'hats' ? 'hats-glow' : ''} ${category === 'clothes' ? 'clothes-glow' : ''} ${category === 'mouths' ? 'mouths-glow' : ''} ${category === 'faces' ? 'faces-major' : ''}`}
                 >
                   <span>{config.emoji}</span>
                   <span>{config.name}</span>
