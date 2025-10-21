@@ -1,6 +1,34 @@
 "use client"
 
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState, useEffect, useMemo, useCallback } from "react"
+
+// Types and constants (no UI change)
+type Category =
+  | "backgrounds"
+  | "backs"
+  | "beards"
+  | "clothes"
+  | "eyebrows"
+  | "eyes"
+  | "faces"
+  | "hats"
+  | "mouths"
+
+type Transform = { x: number; y: number; scale: number }
+
+const DEFAULT_TRANSFORMS: Record<Category, Transform> = {
+  backgrounds: { x: 175, y: 175, scale: 1 },
+  backs: { x: 175, y: 175, scale: 1 },
+  beards: { x: 175, y: 175, scale: 1 },
+  clothes: { x: 175, y: 175, scale: 1 },
+  eyebrows: { x: 175, y: 175, scale: 1 },
+  eyes: { x: 175, y: 175, scale: 1 },
+  faces: { x: 175, y: 175, scale: 1 },
+  hats: { x: 175, y: 175, scale: 1 },
+  mouths: { x: 175, y: 175, scale: 1 },
+}
+
+const DEBUG = false
 
 export default function PFPGenerator() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -33,15 +61,7 @@ export default function PFPGenerator() {
   const [activeCategory, setActiveCategory] = useState<string>("faces")
 
   const [traitTransforms, setTraitTransforms] = useState<Record<string, { x: number; y: number; scale: number }>>({
-    backgrounds: { x: 175, y: 175, scale: 1 },
-    backs: { x: 175, y: 175, scale: 1 },
-    beards: { x: 175, y: 175, scale: 1 },
-    clothes: { x: 175, y: 175, scale: 1 },
-    eyebrows: { x: 175, y: 175, scale: 1 },
-    eyes: { x: 175, y: 175, scale: 1 },
-    faces: { x: 175, y: 175, scale: 1 },
-    hats: { x: 175, y: 175, scale: 1 },
-    mouths: { x: 175, y: 175, scale: 1 },
+    ...DEFAULT_TRANSFORMS,
   })
 
   const [currentTraitControls, setCurrentTraitControls] = useState({
@@ -56,13 +76,13 @@ export default function PFPGenerator() {
 
   const [showExternalLinkConfirm, setShowExternalLinkConfirm] = useState(false)
 
-  const generateAssetPath = (category: string, index: number) => {
+  const generateAssetPath = useCallback((category: string, index: number) => {
     // Special handling for clothes - it should stay as "clothes" not "clothe"
     if (category === "clothes") {
       return `/assets/${category}/clothes_${index}.png`
     }
     return `/assets/${category}/${category.slice(0, -1)}_${index}.png`
-  }
+  }, [])
 
   const selectTrait = (category: string, traitName: string) => {
     setSelectedTraits((prev) => ({
@@ -100,25 +120,13 @@ export default function PFPGenerator() {
 
     for (const category of drawOrder) {
       const traitValue = selectedTraits[category]
-      console.log(`Processing ${category}: ${traitValue}`)
+      if (DEBUG) console.log(`Processing ${category}: ${traitValue}`)
       if (traitValue && traitValue !== "none") {
         try {
-          const img = new Image()
-          img.crossOrigin = "anonymous"
           const imagePath = generateAssetPath(category, Number.parseInt(traitValue))
-          console.log(`Loading image: ${imagePath}`)
+          if (DEBUG) console.log(`Loading image: ${imagePath}`)
 
-          await new Promise((resolve, reject) => {
-            img.onload = () => {
-              console.log(`Successfully loaded ${category} image`)
-              resolve(null)
-            }
-            img.onerror = (e) => {
-              console.error(`Failed to load ${category} image:`, e)
-              reject(e)
-            }
-            img.src = imagePath
-          })
+          const img = await loadImageCached(imagePath)
 
           const transform = traitTransforms[category]
 
@@ -134,7 +142,7 @@ export default function PFPGenerator() {
           // Draw image centered at the transform position
           ctx.drawImage(img, transform.x - scaledWidth / 2, transform.y - scaledHeight / 2, scaledWidth, scaledHeight)
         } catch (error) {
-          console.log(`[v0] Failed to load image for ${category}: ${traitValue}`, error)
+          if (DEBUG) console.log(`[v0] Failed to load image for ${category}: ${traitValue}`, error)
         }
       }
     }
@@ -143,6 +151,24 @@ export default function PFPGenerator() {
   useEffect(() => {
     drawCanvas()
   }, [selectedTraits, traitTransforms])
+
+  // Image cache to avoid re-loading assets repeatedly (no UI changes)
+  const imageCacheRef = useRef<Map<string, HTMLImageElement>>(new Map())
+
+  const loadImageCached = useCallback(async (src: string): Promise<HTMLImageElement> => {
+    const cached = imageCacheRef.current.get(src)
+    if (cached && cached.complete) return cached
+    const img = new Image()
+    img.crossOrigin = "anonymous"
+    const p = new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve()
+      img.onerror = (e) => reject(e)
+    })
+    img.src = src
+    await p
+    imageCacheRef.current.set(src, img)
+    return img
+  }, [])
 
   const updateTraitTransform = (property: "x" | "y" | "scale", value: number) => {
     if (!currentSelectedTrait) return
@@ -166,17 +192,11 @@ export default function PFPGenerator() {
     if (!currentSelectedTrait) return
 
     const [category] = currentSelectedTrait.split("-")
-    const defaultTransform = {
-      backgrounds: { x: 175, y: 175, scale: 1 },
-      backs: { x: 175, y: 175, scale: 1 },
-      beards: { x: 175, y: 175, scale: 1 },
-      clothes: { x: 175, y: 175, scale: 1 },
-      eyebrows: { x: 175, y: 175, scale: 1 },
-      eyes: { x: 175, y: 175, scale: 1 },
-      faces: { x: 175, y: 175, scale: 1 },
-      hats: { x: 175, y: 175, scale: 1 },
-      mouths: { x: 175, y: 175, scale: 1 },
-    }[category] || { x: 175, y: 175, scale: 1 }
+    const defaultTransform = (DEFAULT_TRANSFORMS as Record<string, Transform>)[category] || {
+      x: 175,
+      y: 175,
+      scale: 1,
+    }
 
     setTraitTransforms((prev) => ({
       ...prev,
@@ -264,10 +284,7 @@ export default function PFPGenerator() {
             border-color: #ffed4a;
           }
         }
-                .backs-glow {
-          box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
-          border: 1px solid rgba(255, 215, 0, 0.3) !important;
-        }@keyframes spin {
+        @keyframes spin {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
@@ -287,7 +304,6 @@ export default function PFPGenerator() {
           animation: glow 2s ease-in-out infinite;
           margin: 4px;
           padding: 2px;
-          border: 1px solid rgba(255, 215, 0, 0.3) !important;
         }
         .trait-grid {
           scrollbar-width: thin;
@@ -373,8 +389,7 @@ export default function PFPGenerator() {
           }
         }
         .mouth-32-rare {
-          /* minor: glow only (no spin) */
-          animation: glow 2s ease-in-out infinite;
+          animation: glow 2s ease-in-out infinite, spin 3s linear infinite;
           border: 3px solid #ffd700 !important;
           position: relative;
         }
@@ -385,6 +400,7 @@ export default function PFPGenerator() {
           border-radius: inherit;
           background: linear-gradient(45deg, #ffd700, #ffed4a, #ffd700);
           z-index: -1;
+          animation: spin 2s linear infinite reverse;
         }
         .hat-32-rare {
           position: relative;
@@ -411,15 +427,6 @@ export default function PFPGenerator() {
         @keyframes sparkle {
           0%, 100% { opacity: 0.6; transform: scale(1); }
           50% { opacity: 1; transform: scale(1.1); }
-        }
-        /* Major: faces category tab (emoji spins) */
-        .faces-major span:first-child {
-          display: inline-block;
-          animation: spin 12s linear infinite;
-        }
-        /* Major: face_1 item spins */
-        .face-1-major img {
-          animation: spin 12s linear infinite;
         }
       `}</style>
     <div className="min-h-screen bg-gradient-to-br from-[#ccc4fc] to-[#e0d9ff]">
@@ -589,7 +596,7 @@ export default function PFPGenerator() {
                     activeCategory === category
                       ? "bg-[#7c3aed] text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  } ${category === 'beards' ? 'beards-glow' : ''} ${category === 'backs' ? 'backs-glow' : ''} ${category === 'hats' ? 'hats-glow' : ''} ${category === 'clothes' ? 'clothes-glow' : ''} ${category === 'mouths' ? 'mouths-glow' : ''} ${category === 'faces' ? 'faces-major' : ''}`}
+                  } ${category === 'beards' ? 'hats-glow' : ''} ${category === 'backs' ? 'beards-glow' : ''} ${category === 'hats' ? 'hats-glow' : ''} ${category === 'clothes' ? 'clothes-glow' : ''} ${category === 'mouths' ? 'mouths-glow' : ''}`}
                 >
                   <span>{config.emoji}</span>
                   <span>{config.name}</span>
@@ -630,7 +637,7 @@ export default function PFPGenerator() {
                         selectedTraits[activeCategory] === `${i}`
                           ? "border-[#7c3aed] bg-[#7c3aed]/10"
                           : "border-gray-200 hover:border-[#ccc4fc]"
-                      } ${activeCategory === 'beards' && i === 31 ? 'beard-31-rare' : ''} ${activeCategory === 'backs' && i === 30 ? 'back-30-glow' : ''} ${activeCategory === 'hats' && i === 32 ? 'hat-32-rare' : ''} ${activeCategory === 'clothes' && i === 31 ? 'clothes-31-rare' : ''} ${activeCategory === 'mouths' && i === 32 ? 'mouth-32-rare' : ''} ${activeCategory === 'faces' && i === 1 ? 'face-1-major' : ''}`}
+                      } ${activeCategory === 'beards' && i === 31 ? 'beard-31-rare' : ''} ${activeCategory === 'backs' && i === 30 ? 'back-30-glow' : ''} ${activeCategory === 'hats' && i === 32 ? 'hat-32-rare' : ''} ${activeCategory === 'clothes' && i === 31 ? 'clothes-31-rare' : ''} ${activeCategory === 'mouths' && i === 32 ? 'mouth-32-rare' : ''}`}
                       onClick={() => selectTrait(activeCategory, `${i}`)}
                       title={`${assetCategories[activeCategory as keyof typeof assetCategories].name} ${i}`}
                     >
