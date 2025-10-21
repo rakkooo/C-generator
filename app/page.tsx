@@ -236,7 +236,7 @@ export default function PFPGenerator() {
 
   const handleExternalLinkConfirm = () => {
     setShowExternalLinkConfirm(false)
-    window.open("https://forms.gle/NaJcecU6fD9RDLaXA", "_blank")
+    window.open("https://forms.gle/aA2ewTC6sqzDUcdH6", "_blank")
   }
 
   return (
