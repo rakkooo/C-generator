@@ -17,15 +17,15 @@ type Category =
 type Transform = { x: number; y: number; scale: number }
 
 const DEFAULT_TRANSFORMS: Record<Category, Transform> = {
-  backgrounds: { x: 175, y: 175, scale: 1 },
-  backs: { x: 175, y: 175, scale: 1 },
-  beards: { x: 175, y: 175, scale: 1 },
-  clothes: { x: 175, y: 175, scale: 1 },
-  eyebrows: { x: 175, y: 175, scale: 1 },
-  eyes: { x: 175, y: 175, scale: 1 },
-  faces: { x: 175, y: 175, scale: 1 },
-  hats: { x: 175, y: 175, scale: 1 },
-  mouths: { x: 175, y: 175, scale: 1 },
+  backgrounds: { x: 750, y: 750, scale: 1 },
+  backs: { x: 750, y: 750, scale: 1 },
+  beards: { x: 750, y: 750, scale: 1 },
+  clothes: { x: 750, y: 750, scale: 1 },
+  eyebrows: { x: 750, y: 750, scale: 1 },
+  eyes: { x: 750, y: 750, scale: 1 },
+  faces: { x: 750, y: 750, scale: 1 },
+  hats: { x: 750, y: 750, scale: 1 },
+  mouths: { x: 750, y: 750, scale: 1 },
 }
 
 const DEBUG = false
@@ -40,7 +40,7 @@ export default function PFPGenerator() {
     clothes: { count: 32, emoji: "👕", name: "Clothes" },
     eyebrows: { count: 31, emoji: "🤨", name: "Eyebrows" },
     eyes: { count: 32, emoji: "👀", name: "Eyes" },
-    faces: { count: 2, emoji: "😊", name: "Faces" },
+    faces: { count: 3, emoji: "😊", name: "Faces" },
     hats: { count: 33, emoji: "🎩", name: "Hats" },
     mouths: { count: 33, emoji: "👄", name: "Mouths" },
   }
