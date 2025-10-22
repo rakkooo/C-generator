@@ -393,19 +393,28 @@ export default function PFPGenerator() {
             font-size: 10px;
           }
         }
+        /* mouths 32 → hat32-like (weak rare, no spin) */
         .mouth-32-rare {
-          /* minor: glow only */
-          animation: glow 2s ease-in-out infinite;
-          border: 3px solid #ffd700 !important;
           position: relative;
+          background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+          box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+          border: 1px solid rgba(255, 215, 0, 0.4) !important;
         }
         .mouth-32-rare::before {
-          content: '';
+          content: '✨';
           position: absolute;
-          inset: -3px;
-          border-radius: inherit;
-          background: linear-gradient(45deg, #ffd700, #ffed4a, #ffd700);
-          z-index: -1;
+          top: -1px;
+          right: -1px;
+          font-size: 8px;
+          z-index: 10;
+          animation: sparkle 3s ease-in-out infinite;
+        }
+        @media (min-width: 768px) {
+          .mouth-32-rare::before {
+            top: -2px;
+            right: -2px;
+            font-size: 10px;
+          }
         }
         .hat-32-rare {
           position: relative;
@@ -438,8 +447,20 @@ export default function PFPGenerator() {
           display: inline-block;
           animation: spin 12s linear infinite;
         }
-        .face-1-major img {
-          animation: spin 12s linear infinite;
+        /* face1: adopt old mouth32 effect (spin + glow + ring) */
+        .face-1-major {
+          animation: glow 2s ease-in-out infinite, spin 3s linear infinite;
+          border: 3px solid #ffd700 !important;
+          position: relative;
+        }
+        .face-1-major::before {
+          content: '';
+          position: absolute;
+          inset: -3px;
+          border-radius: inherit;
+          background: linear-gradient(45deg, #ffd700, #ffed4a, #ffd700);
+          z-index: -1;
+          animation: spin 2s linear infinite reverse;
         }
       `}</style>
     <div className="min-h-screen bg-gradient-to-br from-[#ccc4fc] to-[#e0d9ff]">
