@@ -17,15 +17,15 @@ type Category =
 type Transform = { x: number; y: number; scale: number }
 
 const DEFAULT_TRANSFORMS: Record<Category, Transform> = {
-  backgrounds: { x: 750, y: 750, scale: 1 },
-  backs: { x: 750, y: 750, scale: 1 },
-  beards: { x: 750, y: 750, scale: 1 },
-  clothes: { x: 750, y: 750, scale: 1 },
-  eyebrows: { x: 750, y: 750, scale: 1 },
-  eyes: { x: 750, y: 750, scale: 1 },
-  faces: { x: 750, y: 750, scale: 1 },
-  hats: { x: 750, y: 750, scale: 1 },
-  mouths: { x: 750, y: 750, scale: 1 },
+  backgrounds: { x: 175, y: 175, scale: 1 },
+  backs: { x: 175, y: 175, scale: 1 },
+  beards: { x: 175, y: 175, scale: 1 },
+  clothes: { x: 175, y: 175, scale: 1 },
+  eyebrows: { x: 175, y: 175, scale: 1 },
+  eyes: { x: 175, y: 175, scale: 1 },
+  faces: { x: 175, y: 175, scale: 1 },
+  hats: { x: 175, y: 175, scale: 1 },
+  mouths: { x: 175, y: 175, scale: 1 },
 }
 
 const DEBUG = false
@@ -227,14 +227,48 @@ export default function PFPGenerator() {
     }))
   }
 
-  const downloadPFP = () => {
-    const canvas = canvasRef.current
-    if (canvas) {
-      const link = document.createElement("a")
-      link.download = "c-generator-pfp.png"
-      link.href = canvas.toDataURL()
-      link.click()
+  const downloadPFP = async () => {
+    const baseCanvas = canvasRef.current
+    if (!baseCanvas) return
+
+    const outSize = 1500 // export resolution
+    const off = document.createElement("canvas")
+    off.width = outSize
+    off.height = outSize
+    const ctx = off.getContext("2d")
+    if (!ctx) return
+
+    ctx.clearRect(0, 0, outSize, outSize)
+    const scaleFactor = outSize / baseCanvas.width
+
+    const drawOrder = ["backgrounds", "backs", "clothes", "faces", "eyebrows", "eyes", "mouths", "beards", "hats"]
+    for (const category of drawOrder) {
+      const traitValue = selectedTraits[category]
+      if (traitValue && traitValue !== "none") {
+        try {
+          const img = await loadImageCached(generateAssetPath(category, Number.parseInt(traitValue)))
+          const transform = traitTransforms[category]
+
+          const canvasSize = outSize
+          const maxDimension = Math.max(img.width, img.height)
+          const baseScale = (canvasSize * transform.scale) / maxDimension
+          const scaledWidth = img.width * baseScale
+          const scaledHeight = img.height * baseScale
+
+          const x = transform.x * scaleFactor
+          const y = transform.y * scaleFactor
+
+          ctx.drawImage(img, x - scaledWidth / 2, y - scaledHeight / 2, scaledWidth, scaledHeight)
+        } catch (e) {
+          if (DEBUG) console.log("[export] Failed to draw", category, e)
+        }
+      }
     }
+
+    const link = document.createElement("a")
+    link.download = "c-generator-pfp.png"
+    link.href = off.toDataURL("image/png")
+    link.click()
   }
 
   const randomizeAll = () => {
