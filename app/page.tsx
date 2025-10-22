@@ -301,9 +301,8 @@ export default function PFPGenerator() {
           border: 1px solid rgba(255, 215, 0, 0.3) !important;
         }
         .mouths-glow {
-          animation: glow 2s ease-in-out infinite;
-          margin: 4px;
-          padding: 2px;
+          /* weak glow: no animation */
+          box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
           border: 1px solid rgba(255, 215, 0, 0.3) !important;
         }
         .backs-glow {
@@ -443,6 +442,13 @@ export default function PFPGenerator() {
           50% { opacity: 1; transform: scale(1.1); }
         }
         /* Major decorations for faces */
+        .faces-major {
+          /* strong glow: animated */
+          animation: glow 2s ease-in-out infinite;
+          margin: 4px;
+          padding: 2px;
+          border: 1px solid rgba(255, 215, 0, 0.3) !important;
+        }
         .faces-major span:first-child {
           display: inline-block;
           animation: spin 12s linear infinite;
